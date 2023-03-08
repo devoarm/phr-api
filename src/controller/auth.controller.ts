@@ -42,8 +42,11 @@ export const LoginController = async (req: Request, res: Response) => {
     //         error: error,
     //       });
     //     });
-    if (req.body.username == "admin" && req.body.password == "skadmin") {
-      let jwtToken = jwt.sign({username:req.body.username,password:req.body.password}, secret);
+    if (req.body.username === "admin" && req.body.password === "skadmin") {
+      let jwtToken = await jwt.sign(
+        { username: req.body.username, password: req.body.password },
+        secret
+      );
       return res.json({
         status: 200,
         token: jwtToken,
