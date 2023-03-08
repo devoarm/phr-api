@@ -1,5 +1,5 @@
 import express from "express";
-import { LoginController } from "../controller/auth.controller";
+import { LoginController, MeController } from "../controller/auth.controller";
 
 import MessageResponse from "../interfaces/MessageResponse";
 import emojis from "./emojis";
@@ -12,6 +12,7 @@ authRouter.get<{}, MessageResponse>("/", (req, res) => {
     results: "Auth API - 👋🌎🌍🌏",
   });
 });
+authRouter.post("/me",MeController);
 authRouter.post("/login", LoginController);
 
 

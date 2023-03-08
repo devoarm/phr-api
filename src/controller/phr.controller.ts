@@ -1,6 +1,9 @@
 import express, { ErrorRequestHandler, Request, Response } from "express";
 import moment from "moment";
 import dbHdc from "../config/dbHdc";
+import { CoverageType } from "../interfaces/phr/Encounter.type";
+import { PhrCoverageMap } from "../service/phrMap/coverageMap.service";
+import { PhrVitalSignsMap } from "../service/phrMap/vitalSignsMap.service";
 
 require("dotenv").config();
 
@@ -30,6 +33,32 @@ FROM person
 LEFT JOIN chospital ON chospital.hoscode = person.HOSPCODE
 LIMIT 100`);
     return res.json({ status: 200, results: query });
+  } catch (error: any) {
+    return res.json({ status: 500, results: error.message });
+  }
+};
+export const GetEncounter = async (req: Request, res: Response) => {
+  try {
+    const { seq } = req.params;
+    const converageMap = new PhrCoverageMap();
+    const phrVitalSignsMap = new PhrVitalSignsMap();
+
+    const converage = await converageMap.fetchInit(seq);
+    const vitalSigns = await phrVitalSignsMap.fetchInit(seq);
+
+    return res.json({
+      status: 200,
+      results: [
+        {
+          Encounter: [
+            {
+              Coverage: [...converage],
+              vital_signs:{...vitalSigns[0]}
+            },
+          ],
+        },
+      ],
+    });
   } catch (error: any) {
     return res.json({ status: 500, results: error.message });
   }

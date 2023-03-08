@@ -12,34 +12,38 @@ const saltRounds = 10;
 export const LoginController = async (req: Request, res: Response) => {
   try {
     const checkLogin = await dbBlog<User>("user")
-    .where("username", req.body.username)
-    .select("*");
-  if (checkLogin.length > 0) {
-    return bcrypt
-      .compare(req.body.password, checkLogin[0].password)
-      .then((result: any) => {
-        if (!result) {
-          res.status(301).json({
-            status: 301,
-            results: "noPassword",
+      .where("username", req.body.username)
+      .select("*");
+    if (checkLogin.length > 0) {
+      return bcrypt
+        .compare(req.body.password, checkLogin[0].password)
+        .then((result: any) => {
+          if (!result) {
+            res.status(301).json({
+              status: 301,
+              results: "noPassword",
+            });
+          } else {
+            let jwtToken = jwt.sign(checkLogin[0], "create-authen-nodejs", {
+              expiresIn: "1h",
+            });
+            return res.json({
+              status: 200,
+              token: jwtToken,
+              results: checkLogin[0],
+            });
+          }
+        })
+        .catch((error: any) => {
+          res.status(401).json({
+            message: "Authentication failed",
+            error: error,
           });
-        } else {
-          let jwtToken = jwt.sign(checkLogin[0], "create-authen-nodejs", {
-            expiresIn: "1h",
-          });
-          return res.json({ status: 200, results: jwtToken });
-        }
-      })
-      .catch((error: any) => {
-        res.status(401).json({
-          message: "Authentication failed",
-          error: error,
         });
-      });
-  } else {
-    return res.status(301).json({ status: 301, results: "noUsername" });
-  }
-  } catch (error:any) {
+    } else {
+      return res.status(301).json({ status: 301, results: "noUsername" });
+    }
+  } catch (error: any) {
     return res.json({ status: 500, results: error.message });
   }
 };
@@ -81,12 +85,12 @@ export const Register = async (req: Request, res: Response) => {
   }
 };
 
-export const Me = async (req: Request, res: Response) => {
-  const { token } = req.params;
+export const MeController = async (req: Request, res: Response) => {
+  const { token } = req.body;
   try {
     var decoded = jwt_decode(token);
     res.json({ status: 200, results: decoded });
   } catch (error: any) {
-    res.status(301).json({ status: 301, results: error.message });
+    res.status(500).json({ status: 500, results: error.message });
   }
 };
