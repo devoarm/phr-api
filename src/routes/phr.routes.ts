@@ -14,7 +14,7 @@ hdcRouter.get<{}, MessageResponse>("/", (req, res) => {
   });
 });
 hdcRouter.get("/test", GetTest);
-hdcRouter.get("/encounter/:seq",auth, GetEncounter);
+hdcRouter.get("/encounter/:seq", GetEncounter);
 
 
 
