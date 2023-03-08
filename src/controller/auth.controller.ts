@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { reqRegister } from "../interfaces/auth.type";
 import moment from "moment";
+const secret:any = process.env.SECRET_KEY ;
 const saltRounds = 10;
 
 export const LoginController = async (req: Request, res: Response) => {
@@ -24,7 +25,7 @@ export const LoginController = async (req: Request, res: Response) => {
               results: "noPassword",
             });
           } else {
-            let jwtToken = jwt.sign(checkLogin[0], "create-authen-nodejs", {
+            let jwtToken = jwt.sign(checkLogin[0], secret, {
               expiresIn: "1h",
             });
             return res.json({
