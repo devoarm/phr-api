@@ -11,7 +11,7 @@ const secret: any = process.env.SECRET_KEY;
 const saltRounds = 10;
 
 export const LoginController = async (req: Request, res: Response) => {
-  try {
+  // try {
     // const checkLogin = await dbBlog<User>("user")
     //   .where("username", req.body.username)
     //   .select("*");
@@ -54,9 +54,9 @@ export const LoginController = async (req: Request, res: Response) => {
     } else {
       return res.status(301).json({ status: 301, results: "noUsername" });
     }
-  } catch (error: any) {
-    return res.json({ status: 500, results: error.message });
-  }
+  // } catch (error: any) {
+  //   return res.json({ status: 500, results: error.message });
+  // }
 };
 
 export const Register = async (req: Request, res: Response) => {
