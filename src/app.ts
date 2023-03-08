@@ -19,7 +19,7 @@ app.use(express.json());
 app.get<{}, MessageResponse>("/", (req, res) => {
   res.json({
     status: 200,
-    results: "🦄🌈✨👋🌎🌍🌏✨🌈🦄",
+    results: "PHR API Build 2023-03-08 - 👋🌎🌍🌏",
   });
 });
 

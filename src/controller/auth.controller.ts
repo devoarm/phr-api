@@ -25,13 +25,14 @@ export const LoginController = async (req: Request, res: Response) => {
               results: "noPassword",
             });
           } else {
-            let jwtToken = jwt.sign(checkLogin[0], secret, {
-              expiresIn: "1h",
-            });
+            // let jwtToken = jwt.sign(checkLogin[0], secret, {
+            //   expiresIn: "1h",
+            // });
+            let jwtToken = jwt.sign(checkLogin[0], secret);
             return res.json({
               status: 200,
               token: jwtToken,
-              results: checkLogin[0],
+              // results: checkLogin[0],
             });
           }
         })
